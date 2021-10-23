@@ -14,7 +14,8 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        //
+        $administrators = Administrator::all();
+        return view('administrators.index')->with('administrators',$administrators);
     }
 
     /**
@@ -24,7 +25,7 @@ class AdministratorController extends Controller
      */
     public function create()
     {
-        //
+        return view('administrators.create');
     }
 
     /**
@@ -35,7 +36,23 @@ class AdministratorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $imagen = $request ->file('icon');
+        $nombre= time().'.'.$imagen->getClientOriginalExtension();
+        $destino = public_path('static/images/users');
+        $request->icon->move($destino,$nombre);
+        $status = 0;
+        if($request->status == 'Activo'){
+            $status = 1;
+        }
+        Administrator::create([
+            'names'=>$request->names,
+            'icon'=> $nombre,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'area' => $request->area,
+            'status' => $status
+        ]);
+        return redirect('/administrators');
     }
 
     /**
@@ -44,9 +61,10 @@ class AdministratorController extends Controller
      * @param  \App\Models\Administrator  $administrator
      * @return \Illuminate\Http\Response
      */
-    public function show(Administrator $administrator)
+    public function show($id)
     {
-        //
+        $administrator = Administrator::find($id);
+        return view('administrators.show')->with('administrator',$administrator);
     }
 
     /**
@@ -55,9 +73,10 @@ class AdministratorController extends Controller
      * @param  \App\Models\Administrator  $administrator
      * @return \Illuminate\Http\Response
      */
-    public function edit(Administrator $administrator)
+    public function edit($id)
     {
-        //
+        $administrator = Administrador::find($id);
+        return view('administrators.edit')->with('administrator',$administrator);
     }
 
     /**
@@ -67,9 +86,13 @@ class AdministratorController extends Controller
      * @param  \App\Models\Administrator  $administrator
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Administrator $administrator)
+    public function update(Request $request,$id)
     {
-        //
+        $administrator = Administrator::find($id);
+        $input = $request->all;
+        $administrator->update($input);
+        return redirect()->route('administrators.index')
+            ->with('success','Administrator actualizado satisfactoriamente');
     }
 
     /**
@@ -78,8 +101,10 @@ class AdministratorController extends Controller
      * @param  \App\Models\Administrator  $administrator
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Administrator $administrator)
+    public function destroy($id)
     {
-        //
+        Administrator::destroy($id);
+        return redirect()->route('Administrators.index')
+            ->with('succcess','Administrator eliminado satisfactoriamente');
     }
 }
