@@ -140,13 +140,42 @@
 
 
             <div class="action">
-                <h1>Administradores de la consola</h1>
-                <img src="{{ asset('static/images/cheque.png') }}" alt="Check-image" class="image-check">
-                <p class="name-l1">Cambios guardados</p>
-                <p class="name-l2">Tu administrador se ha guardado con éxito</p>
+                <h1>Perfil adminstrador</h1>
             </div>
-
-            <a type="submit" href="{{route('administrators.index')}}" class="button-add">Regresar a mis administradores</a>
+            <div class="barcontent">
+                    <img class="image-user" src="{{asset('static/images/users/'.$administrator->icon)}}" alt="Imagen de carga">
+                    <p class="name-main">{{$administrator->names}}</p>
+                    <ul class="section">
+                        <li class="left-li">
+                            <p class="name-title">Nombre(s)</p>
+                            <p class="name-content">{{$administrator->names}}</p>
+                        </li>
+                        <li class="other-li">
+                            <p class="name-title">Apellidos</p>
+                            <p class="name-content">{{$administrator->last_name}}</p>
+                        </li>
+                        <li class="other-li">
+                            <p class="name-title">Correo Electrónico</p>
+                            <p class="name-content">{{$administrator->email}}</p>
+                        </li>
+                    </ul>
+                    <ul class="section ul-add">
+                        <li class="left-li">
+                            <p class="name-title">Área</p>
+                            <p class="name-content">{{$administrator->area}}</p>
+                        </li>
+                        <li class="other-li">
+                            <p class="name-title">Status</p>
+                            @if ($administrator->status == 1)
+                                <p class="name-content">Activo</p>
+                            @else
+                                <p class="name-content">Inactivo</p>
+                            @endif
+                        </li>
+                    </ul>
+                    <hr>
+                    <a type="submit" href="{{route('administrators.edit',$administrator->id)}}" class="button-add">Editar administtrador</a>
+            </div>
         </main>
     </div>
 </body>

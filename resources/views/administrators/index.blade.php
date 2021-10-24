@@ -189,7 +189,7 @@
                                                 <img class="image-user" src="{{asset('static/images/users/'.$administrator->icon)}}" alt="Imagen usuario">
                                             </li>
                                             <li>
-                                                <p>{{$administrator->names}}</p>
+                                                <p>{{$administrator->names}} {{$administrator->last_name}}</p>
                                             </li>
                                         </ul>
                                     </td>
@@ -203,18 +203,18 @@
                                     <td>
                                         <ul class="ul-actions">
                                             <li>
-                                                <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                <a href="{{route('administrators.edit',$administrator->id)}}" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                                             </li>
                                             <li>
-                                                <form action="#" method="POST">
+                                                <form method="POST" action="{{ route('administrators.destroy',$administrator->id) }}" accept-charset="UTF-8" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></button>
+                                                    <button id="btn-abrir-popup" type="submit" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></button>
                                                 </form>
                                             </li>
 
                                             <li>
-                                                <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                                <a href="{{route('administrators.show',$administrator->id)}}" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
                                             </li>
                                         </ul>
                                     </td>
@@ -225,7 +225,34 @@
             </div>
 
         </main>
+        <div class="overlay" id="overlay">
+            <div class="popup" id="popup">
+                <a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
+                <p class="admin-delete">Eliminar administrador</p>
+                <hr>
+                <ul class="user-profile dates-user">
+                    <li>
+                        <img class="image-user" src="#" alt="Admin">
+                    </li>
+                    <li>
+                        <p class="name">Nombre</p>
+                        <p class="email">Correo</p>
+                    </li>
+                </ul>
+                <div class="font-down">
+                    <ul class="user-profile bottom">
+                        <li>
+                            <button id='btn-cerrar' class="button-des">Cancelar</button>
+                        </li>
+                        <li>
+                            <button class="button-add">Sí, eliminar</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
+    <script src="{{ asset('static/js/app.js') }}"></script>
 </body>
 
 </html>

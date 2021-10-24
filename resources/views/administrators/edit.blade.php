@@ -140,13 +140,76 @@
 
 
             <div class="action">
-                <h1>Administradores de la consola</h1>
-                <img src="{{ asset('static/images/cheque.png') }}" alt="Check-image" class="image-check">
-                <p class="name-l1">Cambios guardados</p>
-                <p class="name-l2">Tu administrador se ha guardado con éxito</p>
+                <h1>Editar administrador</h1>
+            </div>
+            <div class="barcontent">
+                <p>Sube tu fotografía con un peso menor a 3MB</p>
+                <form method="POST" action="{{route('administrators.update',$administrator->id)}}" enctype="multipart/form-data">
+                    @csrf
+                    @method('put')
+                    <div class="bar-image">
+                        <img class="img-icon" src="{{asset('static/images/users/'.$administrator->icon)}}" alt="Imagen de carga">
+                        <p>Arrastra tu archivo o</p>
+                        <label class="input-image"  for="icon">Selecciona</label>
+                        <input type="file" accept="image/*" name="icon" id="icon" value="Selecciona" style="opacity:0;">
+                    </div>
+                    <div class="content-all">
+                            <fieldset anabled>
+                            <div class="form-group">
+                                <label for="names">Nombre(s)</label>
+                                <input type="text" value="{{$administrator->names}}" name="names" id="names" class="form-control" placeholder="Nombre(s)">
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Apellidos</label>
+                                <input type="text"  value="{{$administrator->last_name}}" name="last_name" id="last_name" class="form-control" placeholder="Apellidos">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="text" value="{{$administrator->email}}" name="email" id="email" class="form-control" placeholder="Correo electrónico">
+                            </div>
+                            <div class="form-group">
+                                <label for="area">Área</label>
+                                <select id="area"  name="area" class="form-control">
+                                    @if ($administrator->area == 'Recursos Humanos')
+                                        <option>Recursos Humanos</option>
+                                        <option>Infraestructura</option>
+                                        <option>Contaduría</option>
+                                    @else
+                                        @if ($administrator->area == 'Infraestructura')
+                                            <option>Infraestructura</option>
+                                            <option>Recursos Humanos</option>
+                                            <option>Contaduría</option>
+                                        @else
+                                            <option>Contaduría</option>
+                                            <option>Recursos Humanos</option>
+                                            <option>Infraestructura</option>
+                                        @endif
+
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select id="status"  name="status" class="form-control">
+                                    @if ($administrator->status == '1')
+                                        <option>Activo</option>
+                                        <option>Inactivo</option>
+                                    @else
+                                        <option>Inactivo</option>
+                                        <option>Activo</option>
+                                    @endif
+                                </select>
+                            </div>
+                            <a class="button-des" href="{{route('administrators.index')}}">Cancelar</a>
+                            <button type="submit" class="button-add">Guardar cambios</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </form>
             </div>
 
-            <a type="submit" href="{{route('administrators.index')}}" class="button-add">Regresar a mis administradores</a>
+
+
         </main>
     </div>
 </body>

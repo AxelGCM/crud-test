@@ -75,7 +75,7 @@ class AdministratorController extends Controller
      */
     public function edit($id)
     {
-        $administrator = Administrador::find($id);
+        $administrator = Administrator::find($id);
         return view('administrators.edit')->with('administrator',$administrator);
     }
 
@@ -88,11 +88,28 @@ class AdministratorController extends Controller
      */
     public function update(Request $request,$id)
     {
+        $imagen = $request ->file('icon');
+        $destino = public_path('static/images/users');
+        $status = 0;
         $administrator = Administrator::find($id);
-        $input = $request->all;
-        $administrator->update($input);
-        return redirect()->route('administrators.index')
-            ->with('success','Administrator actualizado satisfactoriamente');
+        $nombre = $administrator->icon;
+        if($request->status == 'Activo'){
+            $status = 1;
+        }
+        if($imagen != null) {
+            unlink(public_path('static/images/users/'.$nombre));
+            $nombre= time().'.'.$imagen->getClientOriginalExtension();
+            $request->icon->move($destino,$nombre);
+        }
+        $administrator->update([
+            'names'=>$request->names,
+            'icon'=> $nombre,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'area' => $request->area,
+            'status' => $status
+        ]);
+        return redirect('/administrators');
     }
 
     /**
@@ -103,8 +120,11 @@ class AdministratorController extends Controller
      */
     public function destroy($id)
     {
+        $administrator = Administrator::find($id);
+        $path = $administrator->icon;
+        unlink(public_path('static/images/users/'.$path));
         Administrator::destroy($id);
-        return redirect()->route('Administrators.index')
-            ->with('succcess','Administrator eliminado satisfactoriamente');
+        return redirect('/administrators');
+
     }
 }
